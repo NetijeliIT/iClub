@@ -1,0 +1,19 @@
+.main-grid {
+  display: grid;
+  grid-template-columns: minmax(2rem, 1fr) minmax(320px, 1000px) minmax(2rem, 1fr);
+}
+
+.main-grid>header {
+  grid-column: 1/-1;
+}
+
+.main-grid>section,
+p {
+  grid-column: 2/3;
+  height: calc(100dvh - 56px);
+  padding: 10px 0;
+}
+
+main {
+  overflow-y: hidden;
+}
