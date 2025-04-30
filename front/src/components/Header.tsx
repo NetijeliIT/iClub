@@ -6,14 +6,12 @@ import { Link, NavLink } from "react-router";
 
 const Header = () => {
     const count = useSelector((state: any) => state.card.ids);
-    console.log(count.length);
-
 
     return (
         <header className="bg-white shadow-md sticky top-0 z-10 h-[60px] main-grid" style={{ gridColumn: "1/-1" }}>
             <div style={{ gridColumn: "2/3" }}>
                 <div className="flex justify-between items-center py-4">
-                    <Link to={"/"} className="text-xl font-bold text-[#D4AF37]">Cafe Logo</Link>
+                    <Link to={"/"} className="text-xl font-bold text-[#D4AF37]">iClub</Link>
                     <div className="flex space-x-4">
                         <NavLink to={"/calendar"} className={`[&.active]:text-[#D4AF37]`}>
                             <CalendarDateRangeIcon className="w-6 h-6 " />

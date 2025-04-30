@@ -6,7 +6,7 @@ import { MealType } from "../types";
 import { addToCard, decrementCount, incrementCount } from "../redux/card-slice";
 
 
-const MealCard = ({ name, desc, image, price, id }: MealType) => {
+const MealCard = ({ name, description, image, price, id }: MealType) => {
     const dispatch = useDispatch();
     const meals = useSelector((state: any) => state.card);
     let currentMeal = meals.meals.find((meal: any) => meal?.id === id)
@@ -16,7 +16,7 @@ const MealCard = ({ name, desc, image, price, id }: MealType) => {
         <div className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all">
             <div className="h-40  bg-gray-100">
                 <img
-                    src={image}
+                    src={image?.filePath.replace("localhost", "192.168.137.117").split("?")[0]}
                     alt={name}
                     className="w-full h-full object-cover"
                 />
@@ -26,11 +26,11 @@ const MealCard = ({ name, desc, image, price, id }: MealType) => {
                     <h4 className="text-xl text-[#393939] font-semibold">{name}</h4>
                     <p className="text-lg text-[#D4AF37] font-semibold">{price} TMT</p>
                 </div>
-                <p className="text-sm font-medium text-gray-500">{desc}</p>
+                <p className="text-sm font-medium text-gray-500">{description}</p>
                 {!currentMeal ?
                     <button className="w-full text-sm sm:text-base mt-2 mb-2 flex items-center justify-center gap-2 font-semibold py-2 rounded-2xl border border-[#D4AF37] transition text-[#D4AF37] cursor-pointer hover:bg-[#D4AF37] hover:text-white"
                         onClick={() => {
-                            dispatch(addToCard({ name, image, desc, price, id }))
+                            dispatch(addToCard({ name, image, description, price, id }))
                         }}
                     >
                         <ShoppingCartIcon className="w-6 h-6" /> Add to Card

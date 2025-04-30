@@ -5,13 +5,14 @@ import { placeOrder } from "../services/apiOrder";
 import toast from "react-hot-toast";
 import { emptyCard } from "../redux/card-slice";
 import { useNavigate } from "react-router";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 
 const CartPage = () => {
     const queryClient = useQueryClient();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const meals = useSelector((state: any) => state.card.meals);
+    const [description, setDescription] = useState<string>();
 
     const calculateTotalCost = (meals: MealWithCount[]): number => {
         let totalCost = 0;
@@ -34,7 +35,8 @@ const CartPage = () => {
     });
 
     async function handleOrder() {
-        let data = { orderItems: [] };
+        let data = { orderItems: [], description: "" };
+        data.description = description as string;
         data.orderItems = meals.map((el: MealWithCount) => {
             return {
                 productId: el.id,
@@ -91,7 +93,10 @@ const CartPage = () => {
                     <div className="my-4 sm:my-6 md:my-8">
                         <h4 className="text-lg text-gray-700 font-medium">Sagady yazyn we basga name isleseniz:</h4>
                         <div className="border border-[#D4AF37] rounded">
-                            <textarea rows={6} className="w-full h-full focus:outline-none p-2" placeholder="Sagady yazyn"></textarea>
+                            <textarea rows={6} className="w-full h-full focus:outline-none p-2"
+                                value={description}
+                                onChange={e => setDescription(e.target.value)}
+                                placeholder="Sagady yazyn"></textarea>
                         </div>
                     </div>
                     <button

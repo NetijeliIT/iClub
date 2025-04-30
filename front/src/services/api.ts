@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_BACKEND_URL, // Replace with your backend URL
+    baseURL: import.meta.env.VITE_BACKEND_URL,
 });
 
 api.interceptors.request.use(
@@ -50,6 +50,8 @@ api.interceptors.response.use(
                 const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/auth/user/refresh`);
                 const { accessToken } = data;
 
+                console.log(data);
+
                 localStorage.setItem('accessToken', accessToken);
                 // localStorage.setItem('refreshToken', newRefreshToken);
 
@@ -59,6 +61,8 @@ api.interceptors.response.use(
                 isRefreshing = false;
                 return api(originalRequest);
             } catch (refreshError) {
+                console.log(refreshError);
+
                 processQueue(refreshError, null);
                 isRefreshing = false;
                 localStorage.clear();

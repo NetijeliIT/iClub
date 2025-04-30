@@ -85,6 +85,9 @@ const HomePage = () => {
         );
     }
 
+    console.log(meals);
+
+
     return (
         <section>
             <CategoryCarousel

@@ -1,14 +1,16 @@
 import { PhoneIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
 import { getUser } from "../services/apiUser";
+import { logout } from "../services/apiAuth";
+import { useNavigate } from "react-router";
 
 const ProfilePage = () => {
+    const navigate = useNavigate()
     const { data, isLoading, error } = useQuery({
         queryFn: () => getUser(),
         queryKey: ["user"],
     });
 
-    // Skeleton loader for input field
     const InputSkeleton = () => (
         <div className="mt-2">
             <div className="h-6 bg-gray-200 rounded w-1/4 mb-1 animate-pulse"></div>
@@ -21,15 +23,12 @@ const ProfilePage = () => {
         </div>
     );
 
-    // Skeleton loader for button
     const ButtonSkeleton = () => (
         <div className="bg-gray-200 text-transparent text-lg font-medium p-2 px-6 rounded float-right mt-4 h-10 w-24 animate-pulse"></div>
     );
 
-    // Handle error state
     if (error) return <div>Error loading profile: {error.message}</div>;
 
-    // Handle loading state
     if (isLoading) {
         return (
             <div>
@@ -97,7 +96,11 @@ const ProfilePage = () => {
                     />
                 </div>
             </div>
-            <button className="bg-[#D4AF37] text-white text-lg font-medium p-2 px-6 rounded float-right mt-4 cursor-pointer hover:opacity-90 transition-all duration-150">
+            <button onClick={() => {
+                logout()
+                localStorage.removeItem("accessToken");
+                navigate("/login")
+            }} className="bg-[#D4AF37] text-white text-lg font-medium p-2 px-6 rounded float-right mt-4 cursor-pointer hover:opacity-90 transition-all duration-150">
                 Log out
             </button>
         </div>

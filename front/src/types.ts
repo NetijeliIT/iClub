@@ -2,7 +2,9 @@ export interface MealType {
     id: string;
     name: string;
     description: string;
-    image: string;
+    image: {
+        filePath: string;
+    };
     price: number;
 }
 

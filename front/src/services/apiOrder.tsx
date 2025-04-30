@@ -10,3 +10,7 @@ export async function getMyOrders() {
     const res = await api.get("/orders/my");
     return res.data
 }
+
+export async function cancelOrder(id: string) {
+    const res = await api.patch(`/orders/${id}/cancel`)
+}
