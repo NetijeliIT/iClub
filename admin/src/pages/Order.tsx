@@ -41,6 +41,11 @@ export default function OrderPage() {
             ),
         },
         {
+            accessorKey: "description",
+            header: "Description",
+            cell: (info) => info.getValue(),
+        },
+        {
             accessorKey: 'status',
             header: 'Status',
             cell: (info) => info.getValue(),

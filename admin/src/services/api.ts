@@ -31,6 +31,8 @@ api.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
+        console.log(error);
+
         if (error.response?.status === 401 && !originalRequest._retry) {
             if (isRefreshing) {
                 return new Promise((resolve, reject) => {
@@ -50,6 +52,8 @@ api.interceptors.response.use(
                 const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/auth/admin/refresh`);
                 const { accessToken } = data;
 
+                console.log(data);
+
                 localStorage.setItem('accessToken', accessToken);
                 // localStorage.setItem('refreshToken', newRefreshToken);
 
@@ -62,7 +66,7 @@ api.interceptors.response.use(
                 processQueue(refreshError, null);
                 isRefreshing = false;
                 localStorage.clear();
-                window.location.href = '/login';
+                // window.location.href = '/login';
                 return Promise.reject(refreshError);
             }
         }

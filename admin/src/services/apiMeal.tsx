@@ -8,8 +8,13 @@ export async function getMeal({ page = 1, pageSize = 10 }: { page?: number, page
     return res.data;
 }
 
-export async function addMeal(data: MealForm) {
+export async function addMeal({ data, image }: { data: MealForm, image: FormData }) {
     const res = await api.post('/product', data);
+    await api.post(`/product/${res.data?.response?.id}/image`, image, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
     return res.data;
 }
 
@@ -18,8 +23,8 @@ export async function updateMeal({ data, id }: { id: string, data: MealForm }) {
     return res.data;
 }
 
-
 export async function deleteMeal(id: string) {
     const res = await api.delete(`/product/${id}`);
-    return res.data
+    // await api.delete(`/product/${id}/image`);
+    return res.data;
 }

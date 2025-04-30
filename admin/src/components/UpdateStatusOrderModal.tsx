@@ -30,7 +30,7 @@ export default function UpdateStatusOrderModal({ isOpen, onClose, details }: Pro
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} title="Accept or cancel order!">
-            {details?.status === "VERIFIED" || details?.status === "CANCEL" ?
+            {details?.status === "VERIFIED" || details?.status === "CANCELLED" ?
                 <div>You already {details?.status.toLowerCase()}!</div>
                 :
                 <>

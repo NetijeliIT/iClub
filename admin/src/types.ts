@@ -15,6 +15,7 @@ export interface MealForm {
     price: number;
     description: string;
     categoryId: string;
+    image?: string;
 }
 
 export interface UserForm {

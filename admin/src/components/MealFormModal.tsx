@@ -3,10 +3,10 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Category, MealForm } from "../types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { addMeal, updateMeal } from "../services/apiMeal";
-import { getCategory } from "../services/apiCategory";
+import { useState } from "react";
 
 type Props = {
     isOpen: boolean;
@@ -17,8 +17,8 @@ type Props = {
 
 export default function MealFormModal({ isOpen, onClose, defaultValues, cats }: Props) {
     const queryClient = useQueryClient();
-
-    // console.log(defaultValues);
+    const [imagePreview, setImagePreview] = useState<string | null>(defaultValues?.image || null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     const schema = Yup.object().shape({
         name: Yup.string().required("required"),
@@ -33,12 +33,13 @@ export default function MealFormModal({ isOpen, onClose, defaultValues, cats }: 
     });
 
     const mutation = useMutation({
-        mutationFn: (data: MealForm) => addMeal(data),
+        mutationFn: (data: { image: FormData, data: MealForm }) => addMeal(data),
         onSuccess: () => {
-            // Invalidate only the first page to avoid refetching all pages
             queryClient.invalidateQueries({ queryKey: ['meal'] });
             toast.success("Created meal!");
             reset();
+            setImagePreview(null);
+            setSelectedFile(null);
             onClose();
         },
         onError: () => {
@@ -50,33 +51,49 @@ export default function MealFormModal({ isOpen, onClose, defaultValues, cats }: 
         mutationFn: (data: MealForm) => updateMeal({ id: defaultValues?.id as string, data }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['meal'] });
-            toast.success("Success!")
-            reset()
-            onClose()
+            toast.success("Success!");
+            reset();
+            setImagePreview(null);
+            setSelectedFile(null);
+            onClose();
         },
-        onError: (error) => {
-            // console.log(error);
-            toast.error("Error updating category");
+        onError: () => {
+            toast.error("Error updating meal");
         }
     });
 
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setSelectedFile(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+
     function submit(data: MealForm) {
-        console.log(data);
 
         if (defaultValues) {
-            updateMutation.mutate(data)
+            updateMutation.mutate(data);
         } else {
-            mutation.mutate(data);
+            const formData = new FormData();
+            if (selectedFile) {
+                formData.append('image', selectedFile);
+            }
+            mutation.mutate({ image: formData, data });
         }
     }
 
-    console.log(errors);
-
-
     return (
         <Modal isOpen={isOpen} onClose={() => {
-            reset()
-            onClose()
+            reset();
+            setImagePreview(null);
+            setSelectedFile(null);
+            onClose();
         }} title="Add Meal">
             <form onSubmit={handleSubmit(submit)}>
                 <div>
@@ -104,7 +121,6 @@ export default function MealFormModal({ isOpen, onClose, defaultValues, cats }: 
                         className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.description?.message ? "border-red-500" : ""}`}
                         placeholder="Enter description"
                         defaultValue={defaultValues?.description}
-
                     />
                     {errors.description?.message && <span className="text-red-500 text-xs font-medium">{errors.description?.message}</span>}
                 </div>
@@ -119,7 +135,6 @@ export default function MealFormModal({ isOpen, onClose, defaultValues, cats }: 
                         className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.price?.message ? "border-red-500" : ""}`}
                         placeholder="Enter price"
                         defaultValue={defaultValues?.price}
-
                     />
                     {errors.price?.message && <span className="text-red-500 text-xs font-medium">{errors.price?.message}</span>}
                 </div>
@@ -142,14 +157,29 @@ export default function MealFormModal({ isOpen, onClose, defaultValues, cats }: 
                     </select>
                     {errors.categoryId?.message && <span className="text-red-500 text-xs font-medium">{errors.categoryId?.message}</span>}
                 </div>
-                {/* } */}
+                <div className="mt-4">
+                    <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+                        Image
+                    </label>
+                    <input
+                        id="image"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+                    />
+                    {imagePreview && (
+                        <div className="mt-2">
+                            <img src={imagePreview} alt="Preview" className="max-w-[200px] h-auto rounded-md" />
+                        </div>
+                    )}
+                </div>
                 <button
                     type="submit"
-                    disabled={mutation.isPending}
+                    disabled={mutation.isPending || updateMutation.isPending}
                     className="bg-[#D4AF37] mt-4 py-2 px-6 rounded text-white cursor-pointer float-right hover:opacity-90 duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {defaultValues ? "Update" : "Add"}
-
                 </button>
             </form>
         </Modal>
