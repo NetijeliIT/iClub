@@ -10,13 +10,30 @@ const MealCard = ({ name, description, image, price, id }: MealType) => {
     const dispatch = useDispatch();
     const meals = useSelector((state: any) => state.card);
     let currentMeal = meals.meals.find((meal: any) => meal?.id === id)
+    let images = {
+        pancakes: "/b1.jpg",
+        omelette: "/b2.jpg",
+        tost: "/tost.jpg",
+        sandwich: "/sandwich.jpg",
+        burrito: "/burrito.jpg",
+        espresso: "/back3.jpg",
+        americano: "/americano.jpeg",
+        latte: "/latte.webp",
+        cappuccino: "/Cappuccino_in_original.jpg",
+        "chocolate cake": "cake.jpg",
+        cheesecake: "how-to-make-perfect-cheesecake-319.webp"
+
+    }
+
+    console.log(image.filePath.replace("localhost", "192.168.23.250"));
 
 
     return (
         <div className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all">
-            <div className="h-40  bg-gray-100">
+            <div className="h-32 sm:h-40  bg-gray-100">
                 <img
-                    src={image?.filePath.replace("localhost", "192.168.137.117").split("?")[0]}
+                    crossOrigin="anonymous"
+                    src={image.filePath.replace("localhost", "192.168.23.250")}
                     alt={name}
                     className="w-full h-full object-cover"
                 />
@@ -26,9 +43,9 @@ const MealCard = ({ name, description, image, price, id }: MealType) => {
                     <h4 className="text-xl text-[#393939] font-semibold">{name}</h4>
                     <p className="text-lg text-[#D4AF37] font-semibold">{price} TMT</p>
                 </div>
-                <p className="text-sm font-medium text-gray-500">{description}</p>
+                <p className="text-sm font-medium text-gray-500 line-clamp-2">{description}</p>
                 {!currentMeal ?
-                    <button className="w-full text-sm sm:text-base mt-2 mb-2 flex items-center justify-center gap-2 font-semibold py-2 rounded-2xl border border-[#D4AF37] transition text-[#D4AF37] cursor-pointer hover:bg-[#D4AF37] hover:text-white"
+                    <button className="w-full h text-sm sm:text-base mt-2 mb-2 flex items-center justify-center gap-2 font-semibold py-2 rounded-2xl border border-[#D4AF37] transition text-[#D4AF37] cursor-pointer hover:bg-[#D4AF37] hover:text-white"
                         onClick={() => {
                             dispatch(addToCard({ name, image, description, price, id }))
                         }}
@@ -37,18 +54,18 @@ const MealCard = ({ name, description, image, price, id }: MealType) => {
                     </button>
                     :
 
-                    <div className="flex mt-2 gap-5 justify-center items-center">
+                    <div className="flex mt-2 mb-2 gap-5 justify-center items-center">
                         <button
                             onClick={() => {
                                 dispatch(decrementCount(id))
                             }}
-                            className="border border-gray-300 rounded-4xl text-gray-600 p-1 cursor-pointer hover:bg-gray-100 transition-all duration-150"><MinusIcon className="w-5 h-5" /></button>
+                            className="border border-gray-300 rounded-4xl text-gray-600 p-2 cursor-pointer hover:bg-gray-100 transition-all duration-150"><MinusIcon className="w-5 h-5" /></button>
                         <p className="text-lg text-gray-600">{currentMeal?.count}</p>
                         <button
                             onClick={() => {
                                 dispatch(incrementCount(id))
                             }}
-                            className="border border-gray-300 rounded-4xl text-gray-600 p-1 cursor-pointer hover:bg-gray-100 transition-all duration-150"><PlusIcon className="w-5 h-5" /></button>
+                            className="border border-gray-300 rounded-4xl text-gray-600 p-2 cursor-pointer hover:bg-gray-100 transition-all duration-150"><PlusIcon className="w-5 h-5" /></button>
                     </div>
 
                 }

@@ -17,7 +17,7 @@ header {
 
 .main-grid {
   display: grid;
-  grid-template-columns: minmax(1.2rem, 1fr) minmax(320px, 1300px) minmax(1.2rem, 1fr);
+  grid-template-columns: minmax(12px, 1fr) minmax(320px, 1300px) minmax(12px, 1fr);
 }
 
 

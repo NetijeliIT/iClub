@@ -23,7 +23,6 @@ const HomePage = () => {
         }
     }, [categories, selectedCategoryId]);
 
-    // Fetch meals for the selected category ID
     const {
         data: meals = {},
         isLoading: isMealsLoading,
@@ -49,7 +48,6 @@ const HomePage = () => {
         </div>
     );
 
-    // Skeleton loader for MealCard
     const MealCardSkeleton = () => (
         <div className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
             <div className="w-full h-40 bg-gray-200"></div>
