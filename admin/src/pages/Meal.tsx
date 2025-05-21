@@ -7,8 +7,8 @@ import {
     getCoreRowModel,
     flexRender,
 } from '@tanstack/react-table';
-import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Meal, MealForm } from "../types";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
+import { MealForm } from "../types";
 import { deleteMeal, getMeal } from "../services/apiMeal";
 import { getCategory } from "../services/apiCategory";
 import toast from "react-hot-toast";

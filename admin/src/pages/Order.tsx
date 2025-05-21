@@ -6,15 +6,15 @@ import {
     getCoreRowModel,
     flexRender,
 } from '@tanstack/react-table';
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 // import { Category, CategoryForm } from "../types";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { getOrders } from "../services/apiOrder";
 import UpdateStatusOrderModal from "../components/UpdateStatusOrderModal";
 import { Order } from "../types";
 
 export default function OrderPage() {
-    const queryClient = useQueryClient();
+    // const queryClient = useQueryClient();
     const [show, setShow] = useState<boolean>(false);
     const [editingCat, setEditingCat] = useState<Order | null>(null);
     // const [del, setDel] = useState<boolean | string>(false);

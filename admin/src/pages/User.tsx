@@ -1,6 +1,6 @@
 import { useState } from "react";
-import UserFormModal from "../components/UserFormModal";
-import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
+// import UserFormModal from "../components/UserFormModal";
+import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { UserForm } from "../types";
 import { deleteUser, getUser } from "../services/apiUser";
@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 
 export default function UserPage() {
     const queryClient = useQueryClient();
-    const [show, setShow] = useState(false);
+    const [_show, setShow] = useState(false);
     const [del, setDel] = useState<boolean | string>(false);
     const { data, isLoading, error } = useQuery({
         queryKey: ['user'],
@@ -45,7 +45,7 @@ export default function UserPage() {
         {
             id: 'actions',
             header: 'Actions',
-            cell: ({ row }) => (
+            cell: ({ }) => (
                 <div className="flex gap-2">
                     <button
                         onClick={() => {
@@ -92,7 +92,7 @@ export default function UserPage() {
             <DeleteModal isOpen={del} onClose={() => setDel(false)} onDelete={() => {
                 deleteMutation.mutate(del as string)
             }} />
-            <UserFormModal isOpen={show} onClose={() => setShow(false)} />
+            {/* <UserFormModal isOpen={show} onClose={() => setShow(false)} /> */}
             <section>
                 <div className='flex justify-between items-center'>
                     <h1 className='text-2xl font-semibold'>User</h1>
