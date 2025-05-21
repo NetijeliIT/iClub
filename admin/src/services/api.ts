@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_BACKEND_URL, // Replace with your backend URL
+    baseURL: import.meta.env.VITE_BACKEND_URL,
+    withCredentials: true, // Important: allow sending cookies
 });
 
 api.interceptors.request.use(
@@ -17,9 +18,9 @@ api.interceptors.request.use(
 
 // Handle token refresh on 401
 let isRefreshing = false;
-let failedQueue = [] as any[];
+let failedQueue: any[] = [];
 
-const processQueue = (error: any, token = null) => {
+const processQueue = (error: any, token: string | null = null) => {
     failedQueue.forEach((prom) => {
         if (error) prom.reject(error);
         else prom.resolve(token);
@@ -31,7 +32,6 @@ api.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
-        console.log(error);
 
         if (error.response?.status === 401 && !originalRequest._retry) {
             if (isRefreshing) {
@@ -49,27 +49,30 @@ api.interceptors.response.use(
             isRefreshing = true;
 
             try {
-                const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/auth/admin/refresh`);
+                const { data } = await axios.get(
+                    `${import.meta.env.VITE_BACKEND_URL}/auth/user/refresh`,
+                    {
+                        withCredentials: true, // Needed to send the cookie
+                    }
+                );
+
                 const { accessToken } = data;
-
-                console.log(data);
-
                 localStorage.setItem('accessToken', accessToken);
-                // localStorage.setItem('refreshToken', newRefreshToken);
 
                 originalRequest.headers.Authorization = `Bearer ${accessToken}`;
                 processQueue(null, accessToken);
 
-                isRefreshing = false;
                 return api(originalRequest);
             } catch (refreshError) {
                 processQueue(refreshError, null);
-                isRefreshing = false;
                 localStorage.clear();
-                // window.location.href = '/login';
+                window.location.href = '/login';
                 return Promise.reject(refreshError);
+            } finally {
+                isRefreshing = false;
             }
         }
+
         return Promise.reject(error);
     }
 );
