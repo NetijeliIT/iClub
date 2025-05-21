@@ -22,7 +22,7 @@ const LoginPage = () => {
       .min(8, "Password must be at least 8 characters")
   });
 
-  const { register, formState: { errors }, handleSubmit, reset } = useForm({
+  const { register, formState: { errors }, handleSubmit } = useForm({
     resolver: yupResolver(schema)
   });
 

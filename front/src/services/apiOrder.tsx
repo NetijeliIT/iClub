@@ -12,5 +12,6 @@ export async function getMyOrders() {
 }
 
 export async function cancelOrder(id: string) {
-    const res = await api.patch(`/orders/${id}/cancel`)
+    const res = await api.patch(`/orders/${id}/cancel`);
+    return res.data;
 }

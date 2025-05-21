@@ -10,22 +10,7 @@ const MealCard = ({ name, description, image, price, id }: MealType) => {
     const dispatch = useDispatch();
     const meals = useSelector((state: any) => state.card);
     let currentMeal = meals.meals.find((meal: any) => meal?.id === id)
-    let images = {
-        pancakes: "/b1.jpg",
-        omelette: "/b2.jpg",
-        tost: "/tost.jpg",
-        sandwich: "/sandwich.jpg",
-        burrito: "/burrito.jpg",
-        espresso: "/back3.jpg",
-        americano: "/americano.jpeg",
-        latte: "/latte.webp",
-        cappuccino: "/Cappuccino_in_original.jpg",
-        "chocolate cake": "cake.jpg",
-        cheesecake: "how-to-make-perfect-cheesecake-319.webp"
 
-    }
-
-    console.log(image.filePath.replace("localhost", "192.168.23.250"));
 
 
     return (
