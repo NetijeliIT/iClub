@@ -11,6 +11,7 @@ import OrdersPage from './pages/Orders'
 import LoginPage from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 import { Toaster } from 'react-hot-toast'
+import Booking from './pages/Booking'
 
 function App() {
 
@@ -21,17 +22,17 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/login' element={<LoginPage />} />
-          <Route element={<ProtectedRoute />}>
+          {/* <Route element={<ProtectedRoute />}> */}
             <Route path='/' element={<MainContainer />} >
               <Route index element={<HomePage />} />
-              <Route path='/calendar' element={<Calendar />} />
+              <Route path='/calendar' element={<Booking />} />
               <Route path='/cart' element={<CartPage />} />
               <Route path='/profile' element={<ProfileContainer />} >
                 <Route index element={<ProfilePage />} />
                 <Route path='/profile/orders' element={<OrdersPage />} />
               </Route>
             </Route>
-          </Route>
+          {/* </Route> */}
         </Routes>
       </BrowserRouter>
     </>
