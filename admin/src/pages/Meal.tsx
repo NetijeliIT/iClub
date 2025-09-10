@@ -13,31 +13,36 @@ import { deleteMeal, getMeal } from "../services/apiMeal";
 import { getCategory } from "../services/apiCategory";
 import toast from "react-hot-toast";
 import DeleteModal from "../components/DeleteModal";
+import Pagination from "../components/Pagination";
 
 export default function MealPage() {
     const queryClient = useQueryClient();
     const [show, setShow] = useState(false);
     const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
     const [editingMeal, setEditingMeal] = useState<MealForm | null>(null);
     const [del, setDel] = useState<boolean | string>(false);
-    const pageSize = 10;
+
     const [data, cats] = useQueries({
         queries: [
             {
-                queryKey: ['meal', page],
+                queryKey: ['meal', page, pageSize],
                 queryFn: () => getMeal({ page, pageSize }),
             },
             {
                 queryKey: ['category'],
-                queryFn: () => getCategory(),
+                queryFn: () => getCategory({ page, pageSize }),
             }
         ]
     });
 
+    console.log(data.data);
+    
+
     const deleteMutation = useMutation({
         mutationFn: (id: string) => deleteMeal(id),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['meal', page] });
+            queryClient.invalidateQueries({ queryKey: ['meal', page, pageSize] });
             toast.success("Meal deleted successfully!");
         },
         onError: () => {
@@ -71,7 +76,7 @@ export default function MealPage() {
                             setEditingMeal(row.original);
                             setShow(true);
                         }}
-                        className="text-blue-600 hover:text-blue-800"
+                        className="text-blue-600 hover:text-blue-800 transition-colors duration-150"
                         title="Edit"
                     >
                         <PencilIcon className="w-5 h-5" />
@@ -80,7 +85,7 @@ export default function MealPage() {
                         onClick={() => {
                             setDel(row.original.id!)
                         }}
-                        className="text-red-600 hover:text-red-800"
+                        className="text-red-600 hover:text-red-800 transition-colors duration-150"
                         title="Delete"
                     >
                         <TrashIcon className="w-5 h-5" />
@@ -96,49 +101,52 @@ export default function MealPage() {
         getCoreRowModel: getCoreRowModel(),
     });
 
-
-    const totalPages = Math.ceil((data?.data?.response?.length || 0) / pageSize);
-
     if (data.isLoading) {
-        return <p>Loading...</p>;
+        return <p className="text-center text-gray-600">Loading...</p>;
     }
 
     if (data.error) {
-        return <p>Error loading meals 😢</p>;
+        return <p className="text-center text-red-600">Error loading meals 😢</p>;
     }
-
-    console.log(data);
-
 
     return (
         <>
-            <DeleteModal isOpen={del} onClose={() => setDel(false)} onDelete={() => {
-                deleteMutation.mutate(del as string);
-            }} />
-            <MealFormModal cats={cats.data} isOpen={show} onClose={() => {
-                setShow(false)
-                setEditingMeal(null)
-            }} defaultValues={editingMeal} />
-            <section>
-                <div className='flex justify-between items-center'>
-                    <h1 className='text-2xl font-semibold'>Meals</h1>
+            <DeleteModal
+                isOpen={del}
+                onClose={() => setDel(false)}
+                onDelete={() => {
+                    deleteMutation.mutate(del as string);
+                }}
+            />
+            <MealFormModal
+                cats={cats.data}
+                isOpen={show}
+                onClose={() => {
+                    setShow(false);
+                    setEditingMeal(null);
+                }}
+                defaultValues={editingMeal}
+            />
+            <section className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                    <h1 className="text-2xl font-semibold text-gray-800">Meals</h1>
                     <button
                         onClick={() => setShow(true)}
-                        className='flex items-center gap-2 text-base bg-[#D4AF37] p-2 rounded text-white font-medium cursor-pointer hover:opacity-90 duration-150'
+                        className="flex items-center gap-2 text-base bg-[#D4AF37] py-2 px-4 rounded text-white font-medium cursor-pointer hover:bg-opacity-90 transition-colors duration-150"
                     >
-                        <PlusIcon className='w-5 h-5' />
+                        <PlusIcon className="w-5 h-5" />
                         Add Meal
                     </button>
                 </div>
-                <div className='mt-4'>
-                    <table className="min-w-full border border-gray-300 rounded-xl">
-                        <thead className="bg-gray-100">
+                <div className="bg-white shadow-lg rounded-xl overflow-hidden">
+                    <table className="min-w-full">
+                        <thead className="bg-gray-50">
                             {table.getHeaderGroups().map((headerGroup) => (
                                 <tr key={headerGroup.id}>
                                     {headerGroup.headers.map((header) => (
                                         <th
                                             key={header.id}
-                                            className="text-left px-4 py-2 border-b font-medium"
+                                            className="text-left px-6 py-4 font-medium text-gray-700 uppercase text-sm tracking-wider"
                                         >
                                             {flexRender(header.column.columnDef.header, header.getContext())}
                                         </th>
@@ -147,10 +155,15 @@ export default function MealPage() {
                             ))}
                         </thead>
                         <tbody>
-                            {table.getRowModel().rows.map((row) => (
-                                <tr key={row.id} className="hover:bg-gray-50">
+                            {table.getRowModel().rows.map((row, index) => (
+                                <tr
+                                    key={row.id}
+                                    className={`${
+                                        index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                                    } hover:bg-gray-100 transition-colors duration-150`}
+                                >
                                     {row.getVisibleCells().map((cell) => (
-                                        <td key={cell.id} className="px-4 py-2 border-b">
+                                        <td key={cell.id} className="px-6 py-4 text-sm text-gray-600">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </td>
                                     ))}
@@ -158,28 +171,14 @@ export default function MealPage() {
                             ))}
                         </tbody>
                     </table>
-                    <div className="mt-4 flex items-center justify-between">
-                        <div>
-                            <p className="text-sm text-gray-700">
-                                Showing {(page - 1) * pageSize + 1} to {Math.min(page * pageSize, data?.data?.length || 0)} of {data?.data?.length || 0} meals
-                            </p>
-                        </div>
-                        <div className="flex gap-2">
-                            <button
-                                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                                disabled={page === 1}
-                                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                Previous
-                            </button>
-                            <button
-                                onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-                                disabled={page === totalPages}
-                                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                Next
-                            </button>
-                        </div>
+                    <div className="p-4 border-t border-gray-200">
+                        <Pagination
+                            page={page}
+                            totalItems={data?.data?.count || 0}
+                            pageSize={pageSize}
+                            onPageChange={setPage}
+                            onPageSizeChange={setPageSize}
+                        />
                     </div>
                 </div>
             </section>

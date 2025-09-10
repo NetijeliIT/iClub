@@ -1,7 +1,7 @@
 import { CategoryForm } from "../types";
 import api from "./api";
 
-export async function getCategory() {
+export async function getCategory(data:{page:number,pageSize:number}) {
     const res = await api.get(`/category`);
     return res.data;
 }

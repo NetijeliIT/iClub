@@ -24,6 +24,9 @@ export interface UserForm {
     secondName: string;
     phoneNumber: string;
     password: string;
+    isTeacher: boolean;
+    department?: string;
+    studentId?:string; 
 }
 
 export type Category = {

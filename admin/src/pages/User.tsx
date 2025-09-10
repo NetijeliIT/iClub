@@ -7,17 +7,24 @@ import { deleteUser, getUser } from "../services/apiUser";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import DeleteModal from "../components/DeleteModal";
+import Pagination from "../components/Pagination";
 import toast from "react-hot-toast";
 
 export default function UserPage() {
     const queryClient = useQueryClient();
     const [show, setShow] = useState(false);
     const [del, setDel] = useState<boolean | string>(false);
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+
     const { data, isLoading, error } = useQuery({
-        queryKey: ['user'],
-        queryFn: () => getUser(),
+        queryKey: ['user', page, pageSize],
+        queryFn: () => getUser({ page, pageSize }),
     });
 
+
+    console.log(data);
+    
 
     const columns: ColumnDef<UserForm>[] = [
         {
@@ -38,6 +45,11 @@ export default function UserPage() {
             cell: (info) => info.getValue(),
         },
         {
+            accessorKey: 'isTeacher',
+            header: 'Is Teacher',
+            cell: (info) => (info.getValue() ? 'Yes' : 'No'),
+        },
+        {
             accessorKey: 'createdAt',
             header: 'Created At',
             cell: (info) => format(info.getValue() as string, "yyyy-MM-dd"),
@@ -45,12 +57,11 @@ export default function UserPage() {
         {
             id: 'actions',
             header: 'Actions',
-            cell: ({ }) => (
+            cell: ({ row }) => (
                 <div className="flex gap-2">
                     <button
-                        onClick={() => {
-                        }}
-                        className="text-red-600 hover:text-red-800"
+                        onClick={() => setDel(row.original.id!)}
+                        className="text-red-600 hover:text-red-800 transition-colors duration-150"
                         title="Delete"
                     >
                         <TrashIcon className="w-5 h-5" />
@@ -69,7 +80,7 @@ export default function UserPage() {
     const deleteMutation = useMutation({
         mutationFn: (id: string) => deleteUser(id),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['user'] });
+            queryClient.invalidateQueries({ queryKey: ['user', page, pageSize] });
             toast.success("User deleted successfully!");
         },
         onError: () => {
@@ -78,41 +89,46 @@ export default function UserPage() {
     });
 
     if (isLoading) {
-        return <p>Loading...</p>;
+        return <p className="text-center text-gray-600">Loading...</p>;
     }
 
     if (error) {
-        return <p>Error loading meals 😢</p>;
+        return <p className="text-center text-red-600">Error loading users 😢</p>;
     }
-
-    console.log(data);
 
     return (
         <>
-            <DeleteModal isOpen={del} onClose={() => setDel(false)} onDelete={() => {
-                deleteMutation.mutate(del as string)
-            }} />
-            <UserFormModal isOpen={show} onClose={() => setShow(false)} />
-            <section>
-                <div className='flex justify-between items-center'>
-                    <h1 className='text-2xl font-semibold'>User</h1>
+            <DeleteModal
+                isOpen={del !== false}
+                onClose={() => setDel(false)}
+                onDelete={() => {
+                    deleteMutation.mutate(del as string);
+                }}
+            />
+            <UserFormModal
+                isOpen={show}
+                onClose={() => setShow(false)}
+            />
+            <section className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                    <h1 className="text-2xl font-semibold text-gray-800">Users</h1>
                     <button
                         onClick={() => setShow(true)}
-                        className='flex items-center gap-2 text-base bg-[#D4AF37] p-2 rounded text-white font-medium cursor-pointer hover:opacity-90 duration-150'
+                        className="flex items-center gap-2 text-base bg-[#D4AF37] py-2 px-4 rounded text-white font-medium cursor-pointer hover:bg-opacity-90 transition-colors duration-150"
                     >
-                        <PlusIcon className='w-5 h-5' />
+                        <PlusIcon className="w-5 h-5" />
                         Add User
                     </button>
                 </div>
-                <div className='mt-4'>
-                    <table className="min-w-full border border-gray-300 rounded-xl">
-                        <thead className="bg-gray-100">
+                <div className="bg-white shadow-lg rounded-xl overflow-hidden">
+                    <table className="min-w-full">
+                        <thead className="bg-gray-50">
                             {table.getHeaderGroups().map((headerGroup) => (
                                 <tr key={headerGroup.id}>
                                     {headerGroup.headers.map((header) => (
                                         <th
                                             key={header.id}
-                                            className="text-left px-4 py-2 border-b font-medium"
+                                            className="text-left px-6 py-4 font-medium text-gray-700 uppercase text-sm tracking-wider"
                                         >
                                             {flexRender(header.column.columnDef.header, header.getContext())}
                                         </th>
@@ -121,10 +137,15 @@ export default function UserPage() {
                             ))}
                         </thead>
                         <tbody>
-                            {table.getRowModel().rows.map((row) => (
-                                <tr key={row.id} className="hover:bg-gray-50">
+                            {table.getRowModel().rows.map((row, index) => (
+                                <tr
+                                    key={row.id}
+                                    className={`${
+                                        index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                                    } hover:bg-gray-100 transition-colors duration-150`}
+                                >
                                     {row.getVisibleCells().map((cell) => (
-                                        <td key={cell.id} className="px-4 py-2 border-b">
+                                        <td key={cell.id} className="px-6 py-4 text-sm text-gray-600">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </td>
                                     ))}
@@ -132,8 +153,17 @@ export default function UserPage() {
                             ))}
                         </tbody>
                     </table>
+                    <div className="p-4 border-t border-gray-200">
+                        <Pagination
+                            page={page}
+                            totalItems={data?.count || 0}
+                            pageSize={pageSize}
+                            onPageChange={setPage}
+                            onPageSizeChange={setPageSize}
+                        />
+                    </div>
                 </div>
             </section>
         </>
-    )
+    );
 }

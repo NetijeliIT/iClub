@@ -1,10 +1,11 @@
+import { Resolver } from "react-hook-form";
 import { UserForm } from "../types";
 import Modal from "./Modal";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { useState } from "react"; // Added for password toggle state
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline"; // Assuming you're using Heroicons
+import { useState } from "react";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createUser } from "../services/apiUser";
 import toast from "react-hot-toast";
@@ -18,6 +19,7 @@ type Props = {
 export default function UserFormModal({ isOpen, onClose, defaultValues }: Props) {
     const queryClient = useQueryClient();
     const [showPassword, setShowPassword] = useState(false);
+    const [isTeacher, setIsTeacher] = useState(defaultValues?.isTeacher ?? false);
 
     const schema = Yup.object().shape({
         firstName: Yup.string().required("Required"),
@@ -27,37 +29,47 @@ export default function UserFormModal({ isOpen, onClose, defaultValues }: Props)
             .matches(/^\+993[0-9]{8}$/, "Phone number must start with +993 followed by 8 digits"),
         password: Yup.string()
             .required("Required")
-            .min(8, "Password must be at least 8 characters")
-        // .matches(
-        //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        //     "Password must contain at least one uppercase letter, one lowercase letter, and one number"
-        // ),
+            .min(8, "Password must be at least 8 characters"),
+        isTeacher: Yup.boolean().required(),
+        department: Yup.string().when("isTeacher", {
+            is: true,
+            then: (schema) => schema.required("Department is required for teachers"),
+            otherwise: (schema) => schema.optional(),
+        }),
+        studentId: Yup.string().when("isTeacher", {
+            is: false,
+            then: (schema) => schema.required("Student ID is required for students"),
+            otherwise: (schema) => schema.optional(),
+        }),
     });
 
-    const { register, formState: { errors }, handleSubmit, reset } = useForm<UserForm>({
-        resolver: yupResolver(schema),
-        defaultValues: defaultValues ?? {},
+    const { register, formState: { errors }, handleSubmit, reset, setValue } = useForm<UserForm>({
+        resolver: yupResolver(schema) as Resolver<UserForm>,
+        defaultValues: defaultValues ?? { isTeacher: false },
     });
 
     const mutation = useMutation({
         mutationFn: (data: UserForm) => createUser(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["user"] });
-            toast.success("Created meal!");
+            toast.success("Created user!");
             reset();
             onClose();
         },
         onError: (error) => {
-            toast.error("Failed to create meal");
+            toast.error("Failed to create user");
             console.log(error);
-
         },
     });
 
     function handle(data: UserForm) {
-        console.log(data);
-        mutation.mutate(data)
+        mutation.mutate(data);
     }
+
+    const handleTeacherToggle = (checked: boolean) => {
+        setIsTeacher(checked);
+        setValue("isTeacher", checked, { shouldValidate: true });
+    };
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -131,6 +143,68 @@ export default function UserFormModal({ isOpen, onClose, defaultValues }: Props)
                     </div>
                     {errors.password?.message && <span className="text-red-500 text-xs font-medium">{errors.password?.message}</span>}
                 </div>
+                    <div>
+                        <label htmlFor="department" className="block text-sm font-medium text-gray-700">
+                            Department
+                        </label>
+                        <input
+                            id="department"
+                            type="text"
+                            {...register("department")}
+                            className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.department?.message ? "border-red-500" : ""}`}
+                            placeholder="Enter department"
+                            defaultValue={defaultValues?.department}
+                        />
+                        {errors.department?.message && <span className="text-red-500 text-xs font-medium">{errors.department?.message}</span>}
+                    </div>
+                    <div>
+                    <label htmlFor="isTeacher" className="block text-sm font-medium text-gray-700">
+                        User Type
+                    </label>
+                    <div className="mt-2 flex items-center">
+                        <span className="text-sm text-gray-600 mr-3">Student</span>
+                        <label
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 cursor-pointer ${
+                                isTeacher ? "bg-[#D4AF37]" : "bg-gray-200"
+                            }`}
+                        >
+                            <input
+                                id="isTeacher"
+                                type="checkbox"
+                                {...register("isTeacher")}
+                                className="hidden"
+                                onChange={(e) => handleTeacherToggle(e.target.checked)}
+                                defaultChecked={defaultValues?.isTeacher}
+                            />
+                            <span
+                                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${
+                                    isTeacher ? "translate-x-6" : "translate-x-1"
+                                }`}
+                            />
+                        </label>
+                        <span className="text-sm text-gray-600 ml-3">Teacher</span>
+                    </div>
+                    {errors.isTeacher?.message && <span className="text-red-500 text-xs font-medium">{errors.isTeacher?.message}</span>}
+                </div>
+                {isTeacher?
+                null
+                :
+                <div>
+                <label htmlFor="studentId" className="block text-sm font-medium text-gray-700">
+                    Student ID
+                </label>
+                <input
+                    id="studentId"
+                    type="text"
+                    {...register("studentId")}
+                    className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.studentId?.message ? "border-red-500" : ""}`}
+                    placeholder="Enter student ID"
+                    defaultValue={defaultValues?.studentId}
+                />
+                {errors.studentId?.message && <span className="text-red-500 text-xs font-medium">{errors.studentId?.message}</span>}
+            </div>
+                }
+                        
                 <button
                     type="submit"
                     className="bg-[#D4AF37] mt-4 py-2 px-6 rounded text-white cursor-pointer float-right hover:opacity-90 duration-150 disabled:opacity-50 disabled:cursor-not-allowed"

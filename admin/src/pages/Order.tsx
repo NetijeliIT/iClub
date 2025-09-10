@@ -7,30 +7,25 @@ import {
     flexRender,
 } from '@tanstack/react-table';
 import { useQuery } from "@tanstack/react-query";
-// import { Category, CategoryForm } from "../types";
-// import toast from "react-hot-toast";
 import { getOrders } from "../services/apiOrder";
 import UpdateStatusOrderModal from "../components/UpdateStatusOrderModal";
 import { Order } from "../types";
+import Pagination from "../components/Pagination";
 
 export default function OrderPage() {
-    // const queryClient = useQueryClient();
     const [show, setShow] = useState<boolean>(false);
     const [editingCat, setEditingCat] = useState<Order | null>(null);
-    // const [del, setDel] = useState<boolean | string>(false);
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+
     const { data, isLoading, error } = useQuery({
-        queryKey: ['order'],
-        queryFn: () => getOrders(),
+        queryKey: ['order', page, pageSize],
+        queryFn: () => getOrders({ page, pageSize }),
     });
 
     console.log(data);
 
     const columns: ColumnDef<any>[] = [
-        // {
-        //     accessorKey: 'id',
-        //     header: 'ID',
-        //     cell: (info) => info.getValue(),
-        // },
         {
             id: 'meals',
             header: 'Meals',
@@ -68,7 +63,6 @@ export default function OrderPage() {
                 </div>
             )
         },
-
         {
             id: 'actions',
             header: 'Actions',
@@ -84,15 +78,6 @@ export default function OrderPage() {
                     >
                         <PencilIcon className="w-5 h-5" />
                     </button>
-                    {/* <button
-                        onClick={() => {
-                            setDel(row.original.id as string);
-                        }}
-                        className="text-red-600 hover:text-red-800"
-                        title="Delete"
-                    >
-                        <TrashIcon className="w-5 h-5" />
-                    </button> */}
                 </div>
             ),
         },
@@ -109,28 +94,25 @@ export default function OrderPage() {
     }
 
     if (error) {
-        return <p>Error loading categories 😢</p>;
+        return <p>Error loading orders 😢</p>;
     }
-
-
 
     return (
         <>
-
             <UpdateStatusOrderModal details={editingCat!} isOpen={show} onClose={() => setShow(false)} />
-            <section>
-                <div className='flex justify-between items-center'>
+            <section className="p-6">
+                <div className='flex justify-between items-center mb-6'>
                     <h1 className='text-2xl font-semibold'>Orders</h1>
                 </div>
-                <div className='mt-4'>
-                    <table className="min-w-full border border-gray-300 rounded-xl">
-                        <thead className="bg-gray-100">
+                <div className='bg-white shadow-lg rounded-xl overflow-hidden'>
+                    <table className="min-w-full">
+                        <thead className="bg-gray-50">
                             {table.getHeaderGroups().map((headerGroup) => (
                                 <tr key={headerGroup.id}>
                                     {headerGroup.headers.map((header) => (
                                         <th
                                             key={header.id}
-                                            className="text-left px-4 py-2 border-b font-medium"
+                                            className="text-left px-6 py-4 font-medium text-gray-700 uppercase text-sm tracking-wider"
                                         >
                                             {flexRender(header.column.columnDef.header, header.getContext())}
                                         </th>
@@ -139,10 +121,13 @@ export default function OrderPage() {
                             ))}
                         </thead>
                         <tbody>
-                            {table.getRowModel().rows.map((row) => (
-                                <tr key={row.id} className="hover:bg-gray-50">
+                            {table.getRowModel().rows.map((row, index) => (
+                                <tr
+                                    key={row.id}
+                                    className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"} hover:bg-gray-100 transition-colors duration-150`}
+                                >
                                     {row.getVisibleCells().map((cell) => (
-                                        <td key={cell.id} className="px-4 py-2 border-b">
+                                        <td key={cell.id} className="px-6 py-4 text-sm text-gray-600">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </td>
                                     ))}
@@ -150,6 +135,15 @@ export default function OrderPage() {
                             ))}
                         </tbody>
                     </table>
+                    <div className="p-4 border-t border-gray-200">
+                        <Pagination
+                            page={page}
+                            totalItems={data?.count || 0}
+                            pageSize={pageSize}
+                            onPageChange={setPage}
+                            onPageSizeChange={setPageSize}
+                        />
+                    </div>
                 </div>
             </section>
         </>

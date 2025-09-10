@@ -1,8 +1,13 @@
 import { UserForm } from "../types";
 import api from "./api";
 
-export async function getUser() {
-    const res = await api.get(`/user`);
+export async function getUser(data:{page:number,pageSize:number}) {
+    const res = await api.get(`/user`,{
+        params:{
+            page:data.page,
+            take:data.pageSize
+        }
+    });
     return res.data;
 }
 
