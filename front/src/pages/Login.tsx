@@ -8,9 +8,12 @@ import { LoginForm } from "../types";
 import { login } from "../services/apiAuth";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import {login as loginAuth} from "../redux/auth-slice";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const schema = Yup.object().shape({
@@ -30,7 +33,9 @@ const LoginPage = () => {
     try {
       const res = await login(data);
       localStorage.setItem("accessToken", res.response?.accessToken);
+      localStorage.setItem("isTeacher", res.response?.isTeacher);
       console.log(res);
+      // dispatch(loginAuth(res?.response))
       toast.success("Success!");
       navigate("/")
 

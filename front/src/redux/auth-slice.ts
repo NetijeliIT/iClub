@@ -2,13 +2,13 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 type InitialState = {
     isLogged: boolean;
-    token: string | null;
+    data: any | null;
     isLoading: boolean;
 };
 
 const initialState: InitialState = {
     isLogged: false,
-    token: null,
+    data: null,
     isLoading: true,
 };
 
@@ -16,12 +16,12 @@ export const auth = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        login: (state, action: PayloadAction<string>) => {
-            localStorage.setItem("accessToken", action.payload);
+        login: (state, action: PayloadAction<any>) => {
+            localStorage.setItem("accessToken", action.payload.accessToken);
             return {
                 ...state,
                 isLogged: true,
-                token: action.payload,
+                data: action.payload,
                 isLoading: false,
             };
         },
@@ -30,26 +30,26 @@ export const auth = createSlice({
             return {
                 ...state,
                 isLogged: false,
-                token: null,
+                data: null,
                 isLoading: false,
             };
         },
-        register: (state, action: PayloadAction<string>) => {
-            localStorage.setItem("token", action.payload);
+        register: (state, action: PayloadAction<any>) => {
+            localStorage.setItem("accessToken", action.payload.accessToken);
             return {
                 ...state,
                 isLogged: true,
-                token: action.payload,
+                data: action.payload,
                 isLoading: false,
             };
         },
         initializeAuth: (state) => {
-            const savedToken = localStorage.getItem("token");
+            const savedToken = localStorage.getItem("accessToken");
             if (savedToken) {
                 return {
                     ...state,
                     isLogged: true,
-                    token: savedToken,
+                    data: savedToken,
                     isLoading: false,
                 };
             }

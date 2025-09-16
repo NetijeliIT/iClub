@@ -6,6 +6,8 @@ import { Link, NavLink } from "react-router";
 
 const Header = () => {
     const count = useSelector((state: any) => state.card.ids);
+    const isTeacher = JSON.parse(localStorage.getItem("isTeacher") || "false")
+    
 
     return (
         <header className="bg-white shadow-md sticky top-0 z-10 h-[60px] main-grid" style={{ gridColumn: "1/-1" }}>
@@ -13,10 +15,13 @@ const Header = () => {
                 <div className="flex justify-between items-center py-4">
                     <Link to={"/"} className="text-xl font-bold text-[#D4AF37]">iClub</Link>
                     <div className="flex space-x-4">
-                        <NavLink to={"/calendar"} className={`[&.active]:text-[#D4AF37]`}>
-                            <CalendarDateRangeIcon className="w-6 h-6 " />
-
-                        </NavLink>
+                        {isTeacher && (
+                             <NavLink to={"/calendar"} className={`[&.active]:text-[#D4AF37]`}>
+                             <CalendarDateRangeIcon className="w-6 h-6 " />
+ 
+                         </NavLink>
+                        )}
+                       
                         <NavLink to={"/profile"} className={'[&.active]:text-[#D4AF37]'} >
                             <UserIcon className="w-6 h-6" />
                         </NavLink>
