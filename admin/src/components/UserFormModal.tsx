@@ -1,13 +1,13 @@
 import { Resolver } from "react-hook-form";
-import { UserForm } from "../types";
+import { Category, UserForm } from "../types";
 import Modal from "./Modal";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createUser } from "../services/apiUser";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createUser, getDeparments } from "../services/apiUser";
 import toast from "react-hot-toast";
 
 type Props = {
@@ -20,6 +20,14 @@ export default function UserFormModal({ isOpen, onClose, defaultValues }: Props)
     const queryClient = useQueryClient();
     const [showPassword, setShowPassword] = useState(false);
     const [isTeacher, setIsTeacher] = useState(defaultValues?.isTeacher ?? false);
+
+    const {data} = useQuery({
+        queryKey:["department"],
+        queryFn:()=> getDeparments()
+    });
+
+    console.log(data);
+    
 
     const schema = Yup.object().shape({
         firstName: Yup.string().required("Required"),
@@ -143,20 +151,25 @@ export default function UserFormModal({ isOpen, onClose, defaultValues }: Props)
                     </div>
                     {errors.password?.message && <span className="text-red-500 text-xs font-medium">{errors.password?.message}</span>}
                 </div>
-                    <div>
-                        <label htmlFor="department" className="block text-sm font-medium text-gray-700">
-                            Department
-                        </label>
-                        <input
-                            id="department"
-                            type="text"
-                            {...register("department")}
-                            className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.department?.message ? "border-red-500" : ""}`}
-                            placeholder="Enter department"
-                            defaultValue={defaultValues?.department}
-                        />
-                        {errors.department?.message && <span className="text-red-500 text-xs font-medium">{errors.department?.message}</span>}
-                    </div>
+                <div className="mt-4">
+                    <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700">
+                        Department
+                    </label>
+                    <select
+                        id="categoryId"
+                        {...register("department")}
+                        defaultValue={defaultValues?.department}
+                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.categoryId?.message ? "border-red-500" : ""}`}
+                    >
+                        <option value="">Select a departments</option>
+                        {data?.response?.map((category: Category) => (
+                            <option key={category.title} value={category.title}>
+                                {category.title}
+                            </option>
+                        ))}
+                    </select>
+                    {errors.department?.message && <span className="text-red-500 text-xs font-medium">{errors.department?.message}</span>}
+                </div>
                     <div>
                     <label htmlFor="isTeacher" className="block text-sm font-medium text-gray-700">
                         User Type

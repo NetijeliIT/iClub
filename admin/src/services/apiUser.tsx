@@ -20,3 +20,8 @@ export async function deleteUser(id: string) {
     const res = await api.delete(`/user/${id}`);
     return res.data;
 }
+
+export async function getDeparments() {
+    const res = await api.get('/department');
+    return res.data;
+}
