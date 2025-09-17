@@ -36,7 +36,7 @@ const CartPage = () => {
 
     async function handleOrder() {
         let data = { orderItems: [], description: "" };
-        data.description = description as string;
+        data.description = description as string || '';
         data.orderItems = meals.map((el: MealWithCount) => {
             return {
                 productId: el.id,

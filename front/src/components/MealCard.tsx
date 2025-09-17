@@ -18,7 +18,7 @@ const MealCard = ({ name, description, image, price, id }: MealType) => {
             <div className="h-32 sm:h-40  bg-gray-100">
                 <img
                     crossOrigin="anonymous"
-                    src={image.filePath.replace("localhost", "localhost")}
+                    src={image.filePath.replace("localhost", import.meta.env.VITE_IMAGE!)}
                     alt={name}
                     className="w-full h-full object-cover"
                 />

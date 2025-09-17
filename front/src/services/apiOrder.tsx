@@ -2,6 +2,7 @@ import { MealWithCount } from "../types";
 import api from "./api";
 
 export async function placeOrder(data: { orderItems: MealWithCount[] }) {
+    console.log(data);
     const res = await api.post(`/orders`, data);
     return res.data;
 }
