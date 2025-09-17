@@ -18,6 +18,34 @@ export interface MealForm {
     image?: string;
 }
 
+export interface BookingForm {
+    id?: string;
+    bookingDate: string;
+    details: {
+        id: string;
+        lesson: string;
+        tv: boolean;
+        userId: string;
+        bookingId: string;
+        user: {
+            id: string;
+            firstName: string;
+            secondName: string;
+            studentId: string;
+            department: string;
+            isTeacher: boolean;
+            phoneNumber: string;
+            createdAt: string;
+            updatedAt: string;
+        };
+        createdAt: string;
+        updatedAt: string;
+    }[];
+    createdAt: string;
+    updatedAt: string;
+}
+
+
 export interface UserForm {
     id?: string;
     firstName: string;

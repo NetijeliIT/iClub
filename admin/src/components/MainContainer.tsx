@@ -6,7 +6,7 @@ export default function MainContainer() {
     return (
         <main className="flex">
             <SideNav />
-            <div className="w-full main-grid">
+            <div className="w-full main-grid overflow-y-scroll">
                 <Header />
                 <Outlet />
             </div>

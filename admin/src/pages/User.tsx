@@ -82,9 +82,12 @@ export default function UserPage() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['user', page, pageSize] });
             toast.success("User deleted successfully!");
+            setDel(false)
         },
         onError: () => {
             toast.error("Failed to delete user");
+            setDel(false)
+
         },
     });
 

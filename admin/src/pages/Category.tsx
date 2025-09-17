@@ -27,14 +27,21 @@ export default function CategoryPage() {
         queryFn: () => getCategory({ page, pageSize }),
     });
 
+    console.log(data);
+    
+
     const deleteMutation = useMutation({
         mutationFn: (id: string) => deleteCategory(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['category', page, pageSize] });
             toast.success("Category deleted successfully!");
+            setDel(false);
+
         },
         onError: () => {
             toast.error("Failed to delete category");
+            setDel(false);
+
         },
     });
 
@@ -45,7 +52,7 @@ export default function CategoryPage() {
             cell: (info) => info.getValue(),
         },
         {
-            accessorKey: 'name',
+            accessorKey: 'title',
             header: 'Name',
             cell: (info) => info.getValue(),
         },
@@ -95,7 +102,7 @@ export default function CategoryPage() {
     return (
         <>
             <DeleteModal
-                isOpen={del}
+                isOpen={!!del}
                 onClose={() => setDel(false)}
                 onDelete={() => {
                     deleteMutation.mutate(del as string);

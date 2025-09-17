@@ -15,13 +15,22 @@ import toast from "react-hot-toast";
 import DeleteModal from "../components/DeleteModal";
 import Pagination from "../components/Pagination";
 
+// Extend MealForm to include status if not already defined
+interface ExtendedMealForm extends MealForm {
+    id: string;
+    name: string;
+    price: number;
+    status: 'pending' | 'completed' | 'cancelled' | 'confirmed';
+}
+
 export default function MealPage() {
     const queryClient = useQueryClient();
     const [show, setShow] = useState(false);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const [editingMeal, setEditingMeal] = useState<MealForm | null>(null);
-    const [del, setDel] = useState<boolean | string>(false);
+    const [editingMeal, setEditingMeal] = useState<ExtendedMealForm | null>(null);
+    const [isOpen, setIsOpen] = useState(false); // Controls modal visibility
+    const [deleteId, setDeleteId] = useState<string | null>(null); // Stores ID to delete
 
     const [data, cats] = useQueries({
         queries: [
@@ -32,11 +41,11 @@ export default function MealPage() {
             {
                 queryKey: ['category'],
                 queryFn: () => getCategory({ page, pageSize }),
-            }
-        ]
+            },
+        ],
     });
 
-    console.log(data.data);
+    console.log(data);
     
 
     const deleteMutation = useMutation({
@@ -44,13 +53,17 @@ export default function MealPage() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['meal', page, pageSize] });
             toast.success("Meal deleted successfully!");
+            setIsOpen(false);
+            setDeleteId(null);
         },
         onError: () => {
             toast.error("Failed to delete meal");
+            setIsOpen(false);
+            setDeleteId(null);
         },
     });
 
-    const columns: ColumnDef<MealForm>[] = [
+    const columns: ColumnDef<ExtendedMealForm>[] = [
         {
             accessorKey: 'id',
             header: 'ID',
@@ -64,7 +77,28 @@ export default function MealPage() {
         {
             accessorKey: 'price',
             header: 'Price',
-            cell: (info) => info.getValue(),
+            cell: (info) => `$${info.getValue<number>().toFixed(2)}`,
+        },
+        {
+            accessorKey: 'status',
+            header: 'Status',
+            cell: (info) => {
+                const status = info.getValue() as ExtendedMealForm['status'];
+                const statusStyles: Record<ExtendedMealForm['status'], string> = {
+                    pending: 'bg-amber-200 text-amber-900',
+                    completed: 'bg-green-200 text-green-900',
+                    cancelled: 'bg-red-200 text-red-900',
+                    confirmed: 'bg-blue-200 text-blue-900',
+                };
+                const style = statusStyles[status] ; // Fallback style
+                return (
+                    <span
+                        className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${style}`}
+                    >
+                        {status.charAt(0).toUpperCase() + status.slice(1)}
+                    </span>
+                );
+            },
         },
         {
             id: 'actions',
@@ -83,10 +117,12 @@ export default function MealPage() {
                     </button>
                     <button
                         onClick={() => {
-                            setDel(row.original.id!)
+                            setDeleteId(row.original.id);
+                            setIsOpen(true);
                         }}
                         className="text-red-600 hover:text-red-800 transition-colors duration-150"
                         title="Delete"
+                        disabled={deleteMutation.isPending}
                     >
                         <TrashIcon className="w-5 h-5" />
                     </button>
@@ -96,7 +132,7 @@ export default function MealPage() {
     ];
 
     const table = useReactTable({
-        data: data?.data?.response || [],
+        data: (data?.data?.response || []) as ExtendedMealForm[],
         columns,
         getCoreRowModel: getCoreRowModel(),
     });
@@ -112,10 +148,15 @@ export default function MealPage() {
     return (
         <>
             <DeleteModal
-                isOpen={del}
-                onClose={() => setDel(false)}
+                isOpen={isOpen}
+                onClose={() => {
+                    setIsOpen(false);
+                    setDeleteId(null);
+                }}
                 onDelete={() => {
-                    deleteMutation.mutate(del as string);
+                    if (deleteId) {
+                        deleteMutation.mutate(deleteId);
+                    }
                 }}
             />
             <MealFormModal

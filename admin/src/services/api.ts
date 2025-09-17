@@ -1,8 +1,13 @@
 import axios from 'axios';
 
+interface FailedQueueItem {
+    resolve: (token: string | null) => void;
+    reject: (error: any) => void;
+}
+
 const api = axios.create({
     baseURL: import.meta.env.VITE_BACKEND_URL,
-    // withCredentials: true, // Important: allow sending cookies
+   // withCredentials: true, // Important: allow sending cookies
 });
 
 api.interceptors.request.use(
@@ -18,7 +23,7 @@ api.interceptors.request.use(
 
 // Handle token refresh on 401
 let isRefreshing = false;
-let failedQueue: any[] = [];
+let failedQueue: FailedQueueItem[] = [];
 
 const processQueue = (error: any, token: string | null = null) => {
     failedQueue.forEach((prom) => {
@@ -33,22 +38,25 @@ api.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
+        // If the error is a 401 (Unauthorized) and the request has not been retried
         if (error.response?.status === 401 && !originalRequest._retry) {
+            // If a refresh is already in progress, wait for it
             if (isRefreshing) {
                 return new Promise((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
                 })
                     .then((token) => {
                         originalRequest.headers.Authorization = `Bearer ${token}`;
-                        return api(originalRequest);
+                        return api(originalRequest); // Retry the original request with the new token
                     })
-                    .catch((err) => Promise.reject(err));
+                    .catch((err) => Promise.reject(err)); // Handle refresh token failure
             }
 
             originalRequest._retry = true;
             isRefreshing = true;
 
             try {
+                // Call your refresh endpoint
                 const { data } = await axios.get(
                     `${import.meta.env.VITE_BACKEND_URL}/auth/user/refresh`,
                     {
@@ -57,22 +65,23 @@ api.interceptors.response.use(
                 );
 
                 const { accessToken } = data;
-                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('accessToken', accessToken); // Store the new token
 
-                originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-                processQueue(null, accessToken);
+                originalRequest.headers.Authorization = `Bearer ${accessToken}`; // Set new token on original request
+                processQueue(null, accessToken); // Resolve all failed requests
 
-                return api(originalRequest);
+                return api(originalRequest); // Retry the original request with the new token
             } catch (refreshError) {
-                processQueue(refreshError, null);
-                localStorage.clear();
-                window.location.href = '/login';
-                return Promise.reject(refreshError);
+                processQueue(refreshError, null); // Reject all failed requests
+                localStorage.clear(); // Clear the tokens on failure
+                window.location.href = '/login'; // Redirect to login
+                return Promise.reject(refreshError); // Reject the current request
             } finally {
                 isRefreshing = false;
             }
         }
 
+        // If the error is not a 401, just reject the error
         return Promise.reject(error);
     }
 );

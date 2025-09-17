@@ -159,7 +159,7 @@ export default function UserFormModal({ isOpen, onClose, defaultValues }: Props)
                         id="categoryId"
                         {...register("department")}
                         defaultValue={defaultValues?.department}
-                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.categoryId?.message ? "border-red-500" : ""}`}
+                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.department?.message ? "border-red-500" : ""}`}
                     >
                         <option value="">Select a departments</option>
                         {data?.response?.map((category: Category) => (
