@@ -22,7 +22,8 @@ export async function updateBooking(data:any) {
 
     const res = await api.post(`/bookings/${data.id}/details`,{
             tv:data.tv,
-            lesson:data.lesson
+            lesson:data.lesson,
+            group:data.group
     });
     return res.data;
 }

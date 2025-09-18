@@ -42,7 +42,7 @@ const Calendar = () => {
                         <div
                             key={index}
                             className={`p-2 sm:p-4 min-h-14 rounded-lg ${day === today
-                                ? 'bg-[#D4AF37] text-white'
+                                ? 'bg-[#708238] text-white'
                                 : 'bg-gray-50 text-gray-800'
                                 } flex flex-col items-center justify-between`}
                         >

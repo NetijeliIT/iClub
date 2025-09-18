@@ -8,12 +8,9 @@ import { LoginForm } from "../types";
 import { login } from "../services/apiAuth";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
-import {login as loginAuth} from "../redux/auth-slice";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const schema = Yup.object().shape({
@@ -34,7 +31,6 @@ const LoginPage = () => {
       const res = await login(data);
       localStorage.setItem("accessToken", res.response?.accessToken);
       localStorage.setItem("isTeacher", res.response?.isTeacher);
-      console.log(res);
       // dispatch(loginAuth(res?.response))
       toast.success("Success!");
       navigate("/")
@@ -67,8 +63,9 @@ const LoginPage = () => {
               id="phoneNumber"
               type="text"
               {...register("phoneNumber")}
-              className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.phoneNumber?.message ? "border-red-500" : ""}`}
+              className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238] ${errors.phoneNumber?.message ? "border-red-500" : ""}`}
               placeholder="+993********"
+              defaultValue={"+993"}
             // defaultValue={defaultValues?.phoneNumber}
             />
             {errors.phoneNumber?.message && <span className="text-red-500 text-xs font-medium">{errors.phoneNumber?.message}</span>}
@@ -82,7 +79,7 @@ const LoginPage = () => {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 {...register("password")}
-                className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.password?.message ? "border-red-500" : ""}`}
+                className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238] ${errors.password?.message ? "border-red-500" : ""}`}
                 placeholder="********"
               />
               <button
@@ -101,13 +98,13 @@ const LoginPage = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-[#d4af37] text-white py-3 rounded-xl text-base font-semibold tracking-wide shadow-md hover:bg-[#c09c2f] transition-all"
+            className="w-full bg-[#708238] text-white py-3 rounded-xl text-base font-semibold tracking-wide shadow-md hover:opacity-90 transition-all"
           >
             Log In
           </button>
         </form>
         {/* <p className="text-center text-sm text-gray-600 mt-5">
-          Don’t have an account? <a href="#" className="text-[#d4af37] font-semibold">Sign up</a>
+          Don’t have an account? <a href="#" className="text-[#708238] font-semibold">Sign up</a>
         </p> */}
       </div>
     </div>

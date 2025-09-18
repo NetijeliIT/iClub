@@ -50,7 +50,7 @@ const OrdersPage = () => {
                                         year: "numeric",
                                     })}
                                 </p>
-                                <p className={`font-medium text-md capitalize underline ${order.status === "CANCELLED" ? "text-red-500" : order.status === "VERIFIED" ? "text-green-500" : "text-[#D4AF37]"}`}>{order.status.toLowerCase()}</p>
+                                <p className={`font-medium text-md capitalize underline ${order.status === "CANCELLED" ? "text-red-500" : order.status === "VERIFIED" ? "text-green-500" : "text-[#708238]"}`}>{order.status.toLowerCase()}</p>
                             </div>
                             <p className="text-gray-800 font-medium text-base sm:text-lg">
                                 {console.log(order.orderItems)
@@ -60,7 +60,7 @@ const OrdersPage = () => {
                                 })}
                             </p>
                             <div className="flex justify-between items-center">
-                                <p className="text-[#D4AF37] font-bold text-base sm:text-lg">
+                                <p className="text-[#708238] font-bold text-base sm:text-lg">
                                     {order.totalPrice} TMT
                                 </p>
                                 {order.status === "PENDING" ?

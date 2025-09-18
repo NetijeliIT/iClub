@@ -15,7 +15,7 @@ const CategoryCarousel = ({ data, selectedCategoryId, onCategorySelect }: Props)
                         key={category.id}
                         onClick={() => onCategorySelect(category.id as string)}
                         className={`${category.id === selectedCategoryId ? "active" : ""
-                            } transition-all duration-150 hover:bg-[#D4AF37] hover:text-white py-2 px-6 rounded-4xl text-center text-gray-600 font-medium border border-gray-300 min-w-fit [&.active]:bg-[#D4AF37] [&.active]:text-white`}
+                            } transition-all duration-150 hover:bg-[#708238] hover:text-white py-2 px-6 rounded-4xl text-center text-gray-600 font-medium border border-gray-300 min-w-fit [&.active]:bg-[#708238] [&.active]:text-white`}
                     >
                         {category.title}
                     </button>

@@ -100,7 +100,7 @@ const ProfilePage = () => {
                 logout()
                 localStorage.removeItem("accessToken");
                 navigate("/login")
-            }} className="bg-[#D4AF37] text-white text-lg font-medium p-2 px-6 rounded float-right mt-4 cursor-pointer hover:opacity-90 transition-all duration-150">
+            }} className="bg-[#708238] text-white text-lg font-medium p-2 px-6 rounded float-right mt-4 cursor-pointer hover:opacity-90 transition-all duration-150">
                 Log out
             </button>
         </div>

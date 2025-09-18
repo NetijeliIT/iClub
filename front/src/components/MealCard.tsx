@@ -26,11 +26,11 @@ const MealCard = ({ name, description, image, price, id }: MealType) => {
             <div className="py-2 px-3">
                 <div className="">
                     <h4 className="text-xl text-[#393939] font-semibold">{name}</h4>
-                    <p className="text-lg text-[#D4AF37] font-semibold">{price} TMT</p>
+                    <p className="text-lg text-[#708238] font-semibold">{price} TMT</p>
                 </div>
                 <p className="text-sm font-medium text-gray-500 line-clamp-2">{description}</p>
                 {!currentMeal ?
-                    <button className="w-full h text-sm sm:text-base mt-2 mb-2 flex items-center justify-center gap-2 font-semibold py-2 rounded-2xl border border-[#D4AF37] transition text-[#D4AF37] cursor-pointer hover:bg-[#D4AF37] hover:text-white"
+                    <button className="w-full h text-sm sm:text-base mt-2 mb-2 flex items-center justify-center gap-2 font-semibold py-2 rounded-2xl border border-[#708238] transition text-[#708238] cursor-pointer hover:bg-[#708238] hover:text-white"
                         onClick={() => {
                             dispatch(addToCard({ name, image, description, price, id }))
                         }}
