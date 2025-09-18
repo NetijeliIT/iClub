@@ -40,7 +40,7 @@ export default function Pagination({
                         id="pageSize"
                         value={limit}
                         onChange={handleLimitChange}
-                        className="px-2 py-1 border border-gray-300 rounded-md text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors duration-150"
+                        className="px-2 py-1 border border-gray-300 rounded-md text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238] transition-colors duration-150"
                     >
                         <option value={5}>5</option>
                         <option value={10}>10</option>
@@ -51,7 +51,7 @@ export default function Pagination({
                     <button
                         onClick={() => onPageChange(Math.max(page - 1, 1))}
                         disabled={page === 1}
-                        className="px-3 py-1 bg-[#D4AF37] text-white rounded-md flex items-center gap-2 hover:bg-opacity-90 transition-all duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                        className="px-3 py-1 bg-[#708238] text-white rounded-md flex items-center gap-2 hover:bg-opacity-90 transition-all duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
                         title="Previous Page"
                     >
                         <ChevronLeftIcon className="h-5 w-5" />
@@ -60,7 +60,7 @@ export default function Pagination({
                     <button
                         onClick={() => onPageChange(Math.min(page + 1, totalPages))}
                         disabled={page === totalPages}
-                        className="px-3 py-1 bg-[#D4AF37] text-white rounded-md flex items-center gap-2 hover:bg-opacity-90 transition-all duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                        className="px-3 py-1 bg-[#708238] text-white rounded-md flex items-center gap-2 hover:bg-opacity-90 transition-all duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
                         title="Next Page"
                     >
                         Next

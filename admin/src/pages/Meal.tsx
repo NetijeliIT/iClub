@@ -77,29 +77,9 @@ export default function MealPage() {
         {
             accessorKey: 'price',
             header: 'Price',
-            cell: (info) => `$${info.getValue<number>().toFixed(2)}`,
+            cell: (info) => `${info.getValue<number>().toFixed(2)} `,
         },
-        {
-            accessorKey: 'status',
-            header: 'Status',
-            cell: (info) => {
-                const status = info.getValue() as ExtendedMealForm['status'];
-                const statusStyles: Record<ExtendedMealForm['status'], string> = {
-                    pending: 'bg-amber-200 text-amber-900',
-                    completed: 'bg-green-200 text-green-900',
-                    cancelled: 'bg-red-200 text-red-900',
-                    confirmed: 'bg-blue-200 text-blue-900',
-                };
-                const style = statusStyles[status] ; // Fallback style
-                return (
-                    <span
-                        className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${style}`}
-                    >
-                        {status.charAt(0).toUpperCase() + status.slice(1)}
-                    </span>
-                );
-            },
-        },
+        
         {
             id: 'actions',
             header: 'Actions',
@@ -173,7 +153,7 @@ export default function MealPage() {
                     <h1 className="text-2xl font-semibold text-gray-800">Meals</h1>
                     <button
                         onClick={() => setShow(true)}
-                        className="flex items-center gap-2 text-base bg-[#D4AF37] py-2 px-4 rounded text-white font-medium cursor-pointer hover:bg-opacity-90 transition-colors duration-150"
+                        className="flex items-center gap-2 text-base bg-[#708238] py-2 px-4 rounded text-white font-medium cursor-pointer hover:bg-opacity-90 transition-colors duration-150"
                     >
                         <PlusIcon className="w-5 h-5" />
                         Add Meal

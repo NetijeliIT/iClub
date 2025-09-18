@@ -7,7 +7,7 @@ import { NavLink } from "react-router";
 
 export default function SideNav() {
     return (
-        <aside className="w-72 h-screen p-4 bg-[#D4AF37]">
+        <aside className="w-72 h-screen p-4 bg-[#708238]">
             <h2 className="text-3xl font-semibold text-white">iClub</h2>
             <nav className="mt-4 w-full space-y-1">
                 <NavLink to={"/"} className={'p-2 text-lg text-white font-medium w-full flex gap-1 items-center hover:bg-white/20 transition-all duration-150 [&.active]:bg-white/20'}>

@@ -90,7 +90,7 @@ export default function UserFormModal({ isOpen, onClose, defaultValues }: Props)
                         id="firstName"
                         type="text"
                         {...register("firstName")}
-                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.firstName?.message ? "border-red-500" : ""}`}
+                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238] ${errors.firstName?.message ? "border-red-500" : ""}`}
                         placeholder="Enter first name"
                         defaultValue={defaultValues?.firstName}
                     />
@@ -104,7 +104,7 @@ export default function UserFormModal({ isOpen, onClose, defaultValues }: Props)
                         id="secondName"
                         type="text"
                         {...register("secondName")}
-                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.secondName?.message ? "border-red-500" : ""}`}
+                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238] ${errors.secondName?.message ? "border-red-500" : ""}`}
                         placeholder="Enter last name"
                         defaultValue={defaultValues?.secondName}
                     />
@@ -118,7 +118,7 @@ export default function UserFormModal({ isOpen, onClose, defaultValues }: Props)
                         id="phoneNumber"
                         type="text"
                         {...register("phoneNumber")}
-                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.phoneNumber?.message ? "border-red-500" : ""}`}
+                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238] ${errors.phoneNumber?.message ? "border-red-500" : ""}`}
                         placeholder="+99362430387"
                         defaultValue={defaultValues?.phoneNumber}
                     />
@@ -133,7 +133,7 @@ export default function UserFormModal({ isOpen, onClose, defaultValues }: Props)
                             id="password"
                             type={showPassword ? "text" : "password"}
                             {...register("password")}
-                            className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.password?.message ? "border-red-500" : ""}`}
+                            className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238] ${errors.password?.message ? "border-red-500" : ""}`}
                             placeholder="********"
                             defaultValue={defaultValues?.password}
                         />
@@ -159,7 +159,7 @@ export default function UserFormModal({ isOpen, onClose, defaultValues }: Props)
                         id="categoryId"
                         {...register("department")}
                         defaultValue={defaultValues?.department}
-                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.department?.message ? "border-red-500" : ""}`}
+                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238] ${errors.department?.message ? "border-red-500" : ""}`}
                     >
                         <option value="">Select a departments</option>
                         {data?.response?.map((category: Category) => (
@@ -178,7 +178,7 @@ export default function UserFormModal({ isOpen, onClose, defaultValues }: Props)
                         <span className="text-sm text-gray-600 mr-3">Student</span>
                         <label
                             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 cursor-pointer ${
-                                isTeacher ? "bg-[#D4AF37]" : "bg-gray-200"
+                                isTeacher ? "bg-[#708238]" : "bg-gray-200"
                             }`}
                         >
                             <input
@@ -210,7 +210,7 @@ export default function UserFormModal({ isOpen, onClose, defaultValues }: Props)
                     id="studentId"
                     type="text"
                     {...register("studentId")}
-                    className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.studentId?.message ? "border-red-500" : ""}`}
+                    className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238] ${errors.studentId?.message ? "border-red-500" : ""}`}
                     placeholder="Enter student ID"
                     defaultValue={defaultValues?.studentId}
                 />
@@ -220,7 +220,7 @@ export default function UserFormModal({ isOpen, onClose, defaultValues }: Props)
                         
                 <button
                     type="submit"
-                    className="bg-[#D4AF37] mt-4 py-2 px-6 rounded text-white cursor-pointer float-right hover:opacity-90 duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-[#708238] mt-4 py-2 px-6 rounded text-white cursor-pointer float-right hover:opacity-90 duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Submit
                 </button>

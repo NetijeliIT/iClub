@@ -104,7 +104,7 @@ export default function MealFormModal({ isOpen, onClose, defaultValues, cats }: 
                         id="name"
                         type="text"
                         {...register("name")}
-                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.name?.message ? "border-red-500" : ""}`}
+                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238] ${errors.name?.message ? "border-red-500" : ""}`}
                         placeholder="Enter meal name"
                         defaultValue={defaultValues?.name}
                     />
@@ -118,7 +118,7 @@ export default function MealFormModal({ isOpen, onClose, defaultValues, cats }: 
                         id="description"
                         rows={6}
                         {...register("description")}
-                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.description?.message ? "border-red-500" : ""}`}
+                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238] ${errors.description?.message ? "border-red-500" : ""}`}
                         placeholder="Enter description"
                         defaultValue={defaultValues?.description}
                     />
@@ -132,7 +132,7 @@ export default function MealFormModal({ isOpen, onClose, defaultValues, cats }: 
                         id="price"
                         type="number"
                         {...register("price")}
-                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.price?.message ? "border-red-500" : ""}`}
+                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238] ${errors.price?.message ? "border-red-500" : ""}`}
                         placeholder="Enter price"
                         defaultValue={defaultValues?.price}
                     />
@@ -146,7 +146,7 @@ export default function MealFormModal({ isOpen, onClose, defaultValues, cats }: 
                         id="categoryId"
                         {...register("categoryId")}
                         defaultValue={defaultValues?.categoryId}
-                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.categoryId?.message ? "border-red-500" : ""}`}
+                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238] ${errors.categoryId?.message ? "border-red-500" : ""}`}
                     >
                         <option value="">Select a category</option>
                         {cats?.response?.map((category: Category) => (
@@ -166,7 +166,7 @@ export default function MealFormModal({ isOpen, onClose, defaultValues, cats }: 
                         type="file"
                         accept="image/*"
                         onChange={handleImageChange}
-                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238]"
                     />
                     {imagePreview && (
                         <div className="mt-2">
@@ -177,7 +177,7 @@ export default function MealFormModal({ isOpen, onClose, defaultValues, cats }: 
                 <button
                     type="submit"
                     disabled={mutation.isPending || updateMutation.isPending}
-                    className="bg-[#D4AF37] mt-4 py-2 px-6 rounded text-white cursor-pointer float-right hover:opacity-90 duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-[#708238] mt-4 py-2 px-6 rounded text-white cursor-pointer float-right hover:opacity-90 duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {defaultValues ? "Update" : "Add"}
                 </button>

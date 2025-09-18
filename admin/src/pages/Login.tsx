@@ -26,7 +26,7 @@ export default function LoginPage() {
 
 
     return (
-        <section className="bg-gradient-to-br from-[#D4AF37] to-[#F4D03F] w-screen h-screen flex items-center justify-center">
+        <section className="bg-gradient-to-br from-[#708238] to-[#F4D03F] w-screen h-screen flex items-center justify-center">
             <form onSubmit={handleSubmit(handleLogin)} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Login</h2>
                 <div className="space-y-4">
@@ -38,7 +38,7 @@ export default function LoginPage() {
                             id="username"
                             type="username"
                             {...register("username")}
-                            className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+                            className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238]"
                             placeholder="Enter your Username"
                         />
                         {errors.username?.message && <span className="text-red-500 text-xs font-medium">{errors.username?.message}</span>}
@@ -52,7 +52,7 @@ export default function LoginPage() {
                             id="password"
                             type="password"
                             {...register("password")}
-                            className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+                            className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238]"
                             placeholder="Enter your password"
                         />
                         {errors.password?.message && <span className="text-red-500 text-xs font-medium">{errors.password?.message}</span>}
@@ -60,7 +60,7 @@ export default function LoginPage() {
                     </div>
                     <button
                         type="submit"
-                        className="w-full mt-2 cursor-pointer bg-[#D4AF37] text-white py-2 px-4 rounded-md hover:bg-[#b89730] transition-colors duration-200"
+                        className="w-full mt-2 cursor-pointer bg-[#708238] text-white py-2 px-4 rounded-md hover:bg-[#b89730] transition-colors duration-200"
                     >
                         Sign In
                     </button>

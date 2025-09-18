@@ -117,7 +117,7 @@ export default function UserPage() {
                     <h1 className="text-2xl font-semibold text-gray-800">Users</h1>
                     <button
                         onClick={() => setShow(true)}
-                        className="flex items-center gap-2 text-base bg-[#D4AF37] py-2 px-4 rounded text-white font-medium cursor-pointer hover:bg-opacity-90 transition-colors duration-150"
+                        className="flex items-center gap-2 text-base bg-[#708238] py-2 px-4 rounded text-white font-medium cursor-pointer hover:bg-opacity-90 transition-colors duration-150"
                     >
                         <PlusIcon className="w-5 h-5" />
                         Add User

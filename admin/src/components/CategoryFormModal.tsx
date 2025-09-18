@@ -81,7 +81,7 @@ export default function CategoryFormModal({ isOpen, onClose, defaultValues }: Pr
                         id="title"
                         type="title"
                         {...register("title")}
-                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.title?.message ? "border-red-500" : ""}`}
+                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238] ${errors.title?.message ? "border-red-500" : ""}`}
                         placeholder="Enter your title"
                         defaultValue={defaultValues?.title}
                     />
@@ -96,13 +96,13 @@ export default function CategoryFormModal({ isOpen, onClose, defaultValues }: Pr
                         id="description"
                         rows={4}
                         {...register("description")}
-                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] ${errors.title?.message ? "border-red-500" : ""}`}
+                        className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#708238] focus:border-[#708238] ${errors.title?.message ? "border-red-500" : ""}`}
                         placeholder="Enter your description"
                     />
                     {errors.description?.message && <span className="text-red-500 text-xs font-medium">{errors.description?.message}</span>}
 
                 </div> */}
-                <button type="submit" className="bg-[#D4AF37] mt-4 py-2 px-6 rounded text-white cursor-pointer float-right hover:opacity-90 duration-150">
+                <button type="submit" className="bg-[#708238] mt-4 py-2 px-6 rounded text-white cursor-pointer float-right hover:opacity-90 duration-150">
                     {defaultValues ? "Update" : "Add"}
                 </button>
             </form>
